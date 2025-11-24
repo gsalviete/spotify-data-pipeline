@@ -1,10 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { UsersService } from '../users/user.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
-    constructor(private usersService: UsersService) {}
-
+    constructor(private userService: UserService) {}
+    
     async signIn(username: string, password: string): Promise<any> {
 }}
 
