@@ -6,18 +6,15 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class UserService {
-    constructor(@InjectModel(User.name) private userModel: Model<User>) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-    async findOrCreate(dto: CreateUserDto): Promise<User> {
-        return await this.userModel.findOneAndUpdate(
-            { spotifyId: dto.spotifyId },
-            dto,
-            {
-                new: true,
-                upsert: true,
-                setDefaultsOnInsert: true,
-            },
-        ).exec();
-        
-    }
+  async findOrCreate(dto: CreateUserDto): Promise<User> {
+    return await this.userModel
+      .findOneAndUpdate({ spotifyId: dto.spotifyId }, dto, {
+        new: true,
+        upsert: true,
+        setDefaultsOnInsert: true,
+      })
+      .exec();
+  }
 }

@@ -9,16 +9,17 @@ import { envValidationSchema } from './config/env.validation';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ 
+    ConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: envValidationSchema }),
+      validationSchema: envValidationSchema,
+    }),
     MongooseModule.forRootAsync({
       useFactory: () => ({
-       uri: process.env.MONGODB_URI,
+        uri: process.env.MONGODB_URI,
       }),
-    }), 
+    }),
     AuthModule,
-    UserModule
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
