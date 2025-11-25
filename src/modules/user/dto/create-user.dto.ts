@@ -11,7 +11,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  acessToken: string;
+  accessToken: string;
 
   @IsString()
   @IsNotEmpty()

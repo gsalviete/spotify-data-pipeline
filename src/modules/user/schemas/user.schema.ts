@@ -18,7 +18,7 @@ export class User {
   avatarUrl: string;
 
   @Prop({ required: true })
-  acessToken: string;
+  accessToken: string;
 
   @Prop({ required: true })
   refreshToken: string;
