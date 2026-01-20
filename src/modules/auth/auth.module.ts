@@ -6,7 +6,7 @@ import { UserModule } from '../user/user.module';
 import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [ PassportModule, UserModule ],
+  imports: [PassportModule, UserModule],
   controllers: [AuthController],
   providers: [AuthService, SpotifyStrategy],
 })
