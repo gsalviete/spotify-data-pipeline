@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 export class AuthService {
   constructor(
     private readonly userService: UserService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
   ) {}
 
   async login() {
@@ -15,18 +15,18 @@ export class AuthService {
     const clientId = this.configService.get<string>('SPOTIFY_CLIENT_ID');
     const redirectUri = this.configService.get<string>('SPOTIFY_REDIRECT_URI');
 
-    if(!clientId || !redirectUri){
+    if (!clientId || !redirectUri) {
       throw new Error('Missing environment variable');
     }
 
     const params = new URLSearchParams({
-    client_id: clientId,
-    response_type: 'code',
-    redirect_uri: redirectUri,
-    scope: 'user-read-email user-read-private',
-    state,
-  });
+      client_id: clientId,
+      response_type: 'code',
+      redirect_uri: redirectUri,
+      scope: 'user-read-email user-read-private',
+      state,
+    });
 
-  return `https://accounts.spotify.com/authorize?${params.toString()}`;
+    return `https://accounts.spotify.com/authorize?${params.toString()}`;
   }
 }
