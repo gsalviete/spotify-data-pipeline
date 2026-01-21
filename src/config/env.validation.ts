@@ -6,5 +6,5 @@ export const envValidationSchema = Joi.object({
   MONGODB_URI: Joi.string().uri().required(),
   SPOTIFY_CLIENT_ID: Joi.string().required(),
   SPOTIFY_CLIENT_SECRET: Joi.string().required(),
-  SPOTIFY_CALLBACK_URL: Joi.string().uri().required(),
+  SPOTIFY_REDIRECT_URI: Joi.string().uri().required(),
 });
