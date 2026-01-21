@@ -1,24 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
-import { config } from 'dotenv';
-
-config();
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly configService: ConfigService
+  ) {}
 
   async login() {
     const state = crypto.randomUUID();
 
-    if(!process.env.SPOTIFY_CLIENT_ID || !process.env.SPOTIFY_REDIRECT_URI){
+    const clientId = this.configService.get<string>('SPOTIFY_CLIENT_ID');
+    const redirectUri = this.configService.get<string>('SPOTIFY_REDIRECT_URI');
+
+    if(!clientId || !redirectUri){
       throw new Error('Missing environment variable');
     }
 
     const params = new URLSearchParams({
-    client_id: process.env.SPOTIFY_CLIENT_ID,
+    client_id: clientId,
     response_type: 'code',
-    redirect_uri: process.env.SPOTIFY_REDIRECT_URI,
+    redirect_uri: redirectUri,
     scope: 'user-read-email user-read-private',
     state,
   });
