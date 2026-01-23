@@ -1,7 +1,24 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Redirect, Session } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
-  // @Get('spotify')
-  // @Get('spotify/callback')
+  constructor(
+    private readonly authService: AuthService,
+  ) {}
+  
+
+  @Get('login')
+  @Redirect()
+  async login(@Session() session: Record<string, any>){
+    const url = await this.authService.login(session);
+    return { url, statusCode: 302};
+  }
+
+  @Get('callback')
+  async callback(){
+    
+  }
+
 }
