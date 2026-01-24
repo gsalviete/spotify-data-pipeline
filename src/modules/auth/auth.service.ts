@@ -72,9 +72,7 @@ export class AuthService {
     return response.data;
   }
 
-  async getProfile(dto: CreateUserDto) {
-    const accessToken = dto.accessToken;
-
+  async getProfile(accessToken: string) {
     const response = await fetch('https://api.spotify.com/v1/me', {
     headers: {
       Authorization: 'Bearer ' + accessToken
