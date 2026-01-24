@@ -1,14 +1,13 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
-import { UserService } from '../user/user.service';
 import { ConfigService } from '@nestjs/config';
 import { CallbackDto } from './dto/callback-dto';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UserService,
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
   ) {}
@@ -71,5 +70,18 @@ export class AuthService {
     );
 
     return response.data;
+  }
+
+  async getProfile(dto: CreateUserDto) {
+    const accessToken = dto.accessToken;
+
+    const response = await fetch('https://api.spotify.com/v1/me', {
+    headers: {
+      Authorization: 'Bearer ' + accessToken
+    }
+  });
+
+  const data = await response.json();
+  return data; 
   }
 }
