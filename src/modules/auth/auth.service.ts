@@ -39,6 +39,8 @@ export class AuthService {
     if (dto.state != session.oauthState) {
       throw new NotAcceptableException('State not matches with Code');
     }
+    
+    return this.exchangeCodeForToken(dto);
   }
 
   async exchangeCodeForToken(dto: CallbackDto) {
