@@ -39,7 +39,8 @@ export class AuthService {
       throw new NotAcceptableException('State not matches with Code');
     }
     
-    return this.exchangeCodeForToken(dto);
+    const tokens = await this.exchangeCodeForToken(dto);
+    const profile = await this.getProfile(tokens.access_token);
   }
 
   async exchangeCodeForToken(dto: CallbackDto) {

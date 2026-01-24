@@ -21,7 +21,4 @@ export class AuthController {
   ) {
     return await this.authService.callback(session, dto);
   }
-
-  @Get('me')
-  async getProfile()
 }
