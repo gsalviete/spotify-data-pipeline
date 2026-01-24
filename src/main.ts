@@ -5,19 +5,20 @@ import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   const configService = app.get(ConfigService);
-  const spotifySecret = configService.getOrThrow<string>('SPOTIFY_SESSION_SECRET');
+  const spotifySecret = configService.getOrThrow<string>(
+    'SPOTIFY_SESSION_SECRET',
+  );
 
-    app.use(
-      session({
-        secret: spotifySecret,
-        resave: false,
-        saveUninitialized: false,
-      }),
-    );
-
+  app.use(
+    session({
+      secret: spotifySecret,
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
 
   await app.listen(process.env.PORT ?? 3000);
-  }
+}
 void bootstrap();
