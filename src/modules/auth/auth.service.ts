@@ -3,13 +3,14 @@ import { ConfigService } from '@nestjs/config';
 import { CallbackDto } from './dto/callback-dto';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import { CreateUserDto } from '../user/dto/create-user.dto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly configService: ConfigService,
     private readonly httpService: HttpService,
+    private readonly userService: UserService
   ) {}
 
   async login(session: Record<string, any>) {
@@ -40,7 +41,9 @@ export class AuthService {
     }
     
     const tokens = await this.exchangeCodeForToken(dto);
-    const profile = await this.getProfile(tokens.access_token);
+    const user = await this.loginWithSpotify(tokens.accessToken, tokens.refreshToken);
+
+    return user;
   }
 
   async exchangeCodeForToken(dto: CallbackDto) {
@@ -84,5 +87,18 @@ export class AuthService {
   return data; 
   }
 
-  
+  async loginWithSpotify(accessToken: string, refreshToken: string) {
+    const profile = await this.getProfile(accessToken);
+
+    const user = await this.userService.findOrCreate({
+      spotifyId: profile.id,
+      email: profile.email,
+      displayName: profile.display_name,
+      avatarUrl: profile.images?.[0]?.url,
+      accessToken,
+      refreshToken,
+    });
+
+    return user;
+  }
 }

@@ -19,4 +19,7 @@ export class CreateUserDto {
 
   @IsString()
   avatarUrl?: string;
+
+  @IsString()
+  displayName?: string;
 }
