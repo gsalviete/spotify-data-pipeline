@@ -27,13 +27,9 @@ export class UserService {
     if(!user){
       throw new UnauthorizedException();
     }
-    
-    const newUser = {
-        email: user.email,
-        avatarUrl: user.avatarUrl,
-        displayName: user.displayName,
-    }
 
-    return newUser;
+    const {email, avatarUrl, displayName} = user
+
+    return {email, avatarUrl, displayName};
   }
 }
