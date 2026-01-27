@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
@@ -9,7 +9,6 @@ import { ResponseUserDto } from './dto/response-user.dto';
 export class UserService {
   constructor(@InjectModel(User.name) 
   private userModel: Model<User>,
-  private readonly userRepository: User
 ) {}
 
   async findOrCreate(dto: CreateUserDto): Promise<User> {
@@ -22,14 +21,19 @@ export class UserService {
       .exec();
   }
 
-  async me(dto: CreateUserDto): Promise<ResponseUserDto> {     
+  async me( spotifyId : string): Promise<ResponseUserDto> {     
+    const user = await this.userModel.findOne({ spotifyId })
+
+    if(!user){
+      throw new UnauthorizedException();
+    }
     
-    const user = {
-        email: this.userRepository.email,
-        avatarUrl: this.userRepository.avatarUrl,
-        displayName: this.userRepository.displayName,
+    const newUser = {
+        email: user.email,
+        avatarUrl: user.avatarUrl,
+        displayName: user.displayName,
     }
 
-    return user;
+    return newUser;
   }
 }
