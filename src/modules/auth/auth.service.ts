@@ -43,6 +43,8 @@ export class AuthService {
     const tokens = await this.exchangeCodeForToken(dto);
     const user = await this.loginWithSpotify(tokens.accessToken, tokens.refreshToken);
 
+    session.userId = user.spotifyId;
+
     return user;
   }
 
