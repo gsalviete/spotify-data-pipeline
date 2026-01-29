@@ -28,7 +28,7 @@ export class AuthService {
       client_id: clientId,
       response_type: 'code',
       redirect_uri: redirectUri,
-      scope: 'user-read-email user-read-private',
+      scope: 'user-read-email user-read-private user-top-read',
       state,
     });
 
