@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { envValidationSchema } from './config/env.validation';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { envValidationSchema } from './config/env.validation';
     }),
     AuthModule,
     UserModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
