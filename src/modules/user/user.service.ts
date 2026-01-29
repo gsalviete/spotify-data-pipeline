@@ -32,4 +32,14 @@ export class UserService {
 
     return {email, avatarUrl, displayName};
   }
+
+  async getUser(spotifyId: string){
+    const user = await this.userModel.findOne({ spotifyId })
+
+    if(!user){
+      throw new UnauthorizedException();
+    }
+
+    return user;
+  }
 }

@@ -13,6 +13,12 @@ export class UserController {
     async me(@Session() session: Record<string, any>){
         const userId = session.userId;
         
-        return await this.userService.me(userId)
+        return await this.userService.me(userId);
+    }
+
+    @Get()
+    async getUser(@Session() session: Record<string, any>){
+        const userId = session.userId;
+        return await this.userService.getUser(userId);
     }
 }
