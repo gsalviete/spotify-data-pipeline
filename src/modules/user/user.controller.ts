@@ -17,8 +17,8 @@ export class UserController {
     }
 
     @Get()
-    async getUser(@Session() session: Record<string, any>){
+    async findUser(@Session() session: Record<string, any>){
         const userId = session.userId;
-        return await this.userService.getUser(userId);
+        return await this.userService.findUser(userId);
     }
 }
