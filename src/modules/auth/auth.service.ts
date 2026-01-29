@@ -36,12 +36,20 @@ export class AuthService {
   }
 
   async callback(session: Record<string, any>, dto: CallbackDto) {
+    console.log('session no callback:', session);
+    console.log('state do dto:', dto.state);
+    console.log('state da session:', session.oauthState);
+  
+
     if (dto.state != session.oauthState) {
       throw new NotAcceptableException('State not matches with Code');
     }
     
     const tokens = await this.exchangeCodeForToken(dto);
-    const user = await this.loginWithSpotify(tokens.accessToken, tokens.refreshToken);
+    console.log('tokens recebidos', tokens);
+
+    const user = await this.loginWithSpotify(tokens.access_token, tokens.refresh_token);
+    console.log('user criado', user);
 
     session.userId = user.spotifyId;
 
