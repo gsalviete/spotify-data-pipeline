@@ -19,4 +19,11 @@ export class DashboardController {
     const userId = session.userId;
     return this.dashboardService.getTopTracks(userId);
   }
+
+  @Get('/top/genres')
+  @UseGuards(SessionAuthGuard)
+  async getTopGenres(@Session() session: Record<string, any>){
+    const userId = session.userId;
+    return this.dashboardService.getTopGenres(userId);
+  }
 }
