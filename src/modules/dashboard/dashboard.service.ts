@@ -52,4 +52,25 @@ export class DashboardService {
     );
     return response.data
   }
+
+  async getTopGenres(accessToken: string){
+    const artists = await this.getTopArtists(accessToken)
+  
+    const genreCount: Record<string, number> = {};
+
+  for (const artist of artists) {
+    for (const genre of artist.genres) {
+      genreCount[genre] = (genreCount[genre] || 0) + 1;
+    }
+  }
+
+  const sortedGenres = Object.entries(genreCount)
+    .map(([genre, count]) => ({
+      genre,
+      count,
+    }))
+    .sort((a, b) => b.count - a.count);
+
+  return sortedGenres;
+  }
 }
