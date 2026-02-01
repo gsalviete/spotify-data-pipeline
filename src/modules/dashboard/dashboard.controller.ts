@@ -13,4 +13,10 @@ export class DashboardController {
     return this.dashboardService.getTopArtists(userId);
   }
   
+  @Get('/top/tracks')
+  @UseGuards(SessionAuthGuard)
+  async getTopTracks(@Session() session: Record<string, any>){
+    const userId = session.userId;
+    return this.dashboardService.getTopTracks(userId);
+  }
 }
