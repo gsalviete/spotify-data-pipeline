@@ -15,11 +15,12 @@ async function bootstrap() {
     session({
       secret: spotifySecret,
       resave: false,
-      saveUninitialized: false,
+      saveUninitialized: true,
       cookie: {
       secure: false,
       httpOnly: true,
       maxAge: 1000 * 60 * 10,
+      sameSite: 'lax',
     },
     }),
   );
