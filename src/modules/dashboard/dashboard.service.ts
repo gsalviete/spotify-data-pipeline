@@ -29,7 +29,7 @@ export class DashboardService {
         },
       ),
     );
-    return response.data;
+    return response.data.items;
   }
 
   async getTopTracks(userId: string) {
@@ -50,11 +50,11 @@ export class DashboardService {
         },
       ),
     );
-    return response.data
+    return response.data.items;
   }
 
-  async getTopGenres(accessToken: string){
-    const artists = await this.getTopArtists(accessToken)
+  async getTopGenres(userId: string){
+    const artists = await this.getTopArtists(userId)
   
     const genreCount: Record<string, number> = {};
 
