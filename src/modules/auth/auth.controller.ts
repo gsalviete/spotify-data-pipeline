@@ -11,6 +11,12 @@ export class AuthController {
   @Redirect()
   async login(@Session() session: Record<string, any>) {
     const url = await this.authService.login(session);
+    /*await new Promise<void>((resolve, reject) => {
+      session.save((err: any) => {
+        if (err) reject(err);
+        resolve();
+      });
+    });*/
     return { url, statusCode: 302 };
   }
 
