@@ -75,18 +75,20 @@ export class AuthService {
         },
       ),
     );
-
     return response.data;
   }
 
   async getProfile(accessToken: string) {
-    const response = await fetch('https://api.spotify.com/v1/me', {
+    const response = await firstValueFrom(
+      this.httpService.get(
+      'https://api.spotify.com/v1/me',
+   {
     headers: {
       Authorization: 'Bearer ' + accessToken
     }
-  });
+  }))
 
-  const data = await response.json();
+  const data = await response.data;
   return data; 
   }
 
