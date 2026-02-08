@@ -1,0 +1,25 @@
+import { IsString, IsNotEmpty } from 'class-validator';
+
+export class CreateUserDto {
+  @IsString()
+  @IsNotEmpty()
+  spotifyId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  accessToken: string;
+
+  @IsString()
+  @IsNotEmpty()
+  refreshToken: string;
+
+  @IsString()
+  avatarUrl?: string;
+
+  @IsString()
+  displayName?: string;
+}
