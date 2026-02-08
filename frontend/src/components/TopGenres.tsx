@@ -1,0 +1,145 @@
+import { motion } from 'framer-motion';
+import {
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  Radar,
+  ResponsiveContainer,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+} from 'recharts';
+import type { GenreCount } from '../types/spotify';
+import './TopGenres.css';
+
+interface Props {
+  genres: GenreCount[];
+}
+
+const PIE_COLORS = [
+  '#1db954', '#1ed760', '#4ade80', '#22c55e', '#16a34a',
+  '#15803d', '#059669', '#047857', '#065f46', '#064e3b',
+  '#a7f3d0', '#86efac', '#6ee7b7',
+];
+
+export default function TopGenres({ genres }: Props) {
+  const topGenres = genres.slice(0, 10);
+  const radarData = topGenres.map((g) => ({
+    genre: g.genre.length > 14 ? g.genre.slice(0, 14) + '...' : g.genre,
+    fullGenre: g.genre,
+    count: g.count,
+  }));
+
+  const maxCount = Math.max(...topGenres.map((g) => g.count), 1);
+
+  return (
+    <div className="top-genres">
+      <div className="top-genres-charts">
+        <div className="top-genres-radar">
+          <h3 className="section-title">Radar de g&ecirc;neros</h3>
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={380}>
+              <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="72%">
+                <PolarGrid
+                  stroke="rgba(255,255,255,0.06)"
+                  strokeDasharray="3 3"
+                />
+                <PolarAngleAxis
+                  dataKey="genre"
+                  tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 11 }}
+                />
+                <PolarRadiusAxis
+                  tick={{ fill: 'rgba(255,255,255,0.2)', fontSize: 10 }}
+                  axisLine={false}
+                  domain={[0, maxCount]}
+                />
+                <Tooltip
+                  contentStyle={{
+                    background: 'rgba(24,24,24,0.95)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: '12px',
+                    padding: '10px 14px',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                    fontFamily: 'Outfit',
+                  }}
+                  labelStyle={{ color: '#fff', fontWeight: 600 }}
+                  itemStyle={{ color: '#1db954' }}
+                  formatter={(value) => [`${value} artistas`]}
+                />
+                <Radar
+                  name="G\u00eaneros"
+                  dataKey="count"
+                  stroke="#1db954"
+                  fill="#1db954"
+                  fillOpacity={0.2}
+                  strokeWidth={2}
+                />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="top-genres-pie">
+          <h3 className="section-title">Distribui&ccedil;&atilde;o</h3>
+          <div className="chart-container">
+            <ResponsiveContainer width="100%" height={380}>
+              <PieChart>
+                <Pie
+                  data={topGenres}
+                  dataKey="count"
+                  nameKey="genre"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={130}
+                  innerRadius={70}
+                  paddingAngle={2}
+                  strokeWidth={0}
+                >
+                  {topGenres.map((_, i) => (
+                    <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    background: 'rgba(24,24,24,0.95)',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    borderRadius: '12px',
+                    padding: '10px 14px',
+                    boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+                    fontFamily: 'Outfit',
+                  }}
+                  labelStyle={{ color: '#fff', fontWeight: 600 }}
+                  itemStyle={{ color: '#1db954' }}
+                  formatter={(value) => [`${value} artistas`]}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      <div className="top-genres-list">
+        <h3 className="section-title">Todos os g&ecirc;neros</h3>
+        <div className="genres-tags">
+          {genres.map((g, index) => (
+            <motion.div
+              key={g.genre}
+              className="genre-tag"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.03, duration: 0.3 }}
+              style={{
+                '--intensity': `${(g.count / maxCount) * 100}%`,
+              } as React.CSSProperties}
+            >
+              <span className="genre-tag-name">{g.genre}</span>
+              <span className="genre-tag-count">{g.count}</span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

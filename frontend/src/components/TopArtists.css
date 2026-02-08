@@ -1,0 +1,142 @@
+.top-artists {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 16px;
+  letter-spacing: 0.3px;
+}
+
+.top-artists-chart-section {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.chart-container {
+  width: 100%;
+}
+
+.top-artists-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.artist-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.artist-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.artist-rank {
+  width: 28px;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.artist-card:nth-child(1) .artist-rank,
+.artist-card:nth-child(2) .artist-rank,
+.artist-card:nth-child(3) .artist-rank {
+  color: #1db954;
+  font-weight: 700;
+}
+
+.artist-img-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.artist-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.artist-img--placeholder {
+  background: linear-gradient(135deg, #282828, #333);
+}
+
+.artist-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.artist-name {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.artist-genres {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+}
+
+.artist-popularity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.artist-popularity-bar {
+  width: 80px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.artist-popularity-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1db954, #1ed760);
+  border-radius: 2px;
+}
+
+.artist-popularity-value {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  width: 24px;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .artist-popularity-bar {
+    width: 50px;
+  }
+}
