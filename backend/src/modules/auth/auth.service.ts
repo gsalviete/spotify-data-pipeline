@@ -16,8 +16,7 @@ export class AuthService {
   async login(session: Record<string, any>) {
     const state = crypto.randomUUID();
     session.oauthState = state;
-    console.log('session no login:', session);
-
+    
     const clientId = this.configService.get<string>('SPOTIFY_CLIENT_ID');
     const redirectUri = this.configService.get<string>('SPOTIFY_REDIRECT_URI');
 
