@@ -8,21 +8,21 @@ export class DashboardController {
 
   @Get('/top/artists')
   @UseGuards(SessionAuthGuard)
-  async getTopArtists(@Session() session: Record<string, any>){
+  async getTopArtists(@Session() session: Record<string, any>) {
     const userId = session.userId;
     return this.dashboardService.getTopArtists(userId);
   }
-  
+
   @Get('/top/tracks')
   @UseGuards(SessionAuthGuard)
-  async getTopTracks(@Session() session: Record<string, any>){
+  async getTopTracks(@Session() session: Record<string, any>) {
     const userId = session.userId;
     return this.dashboardService.getTopTracks(userId);
   }
 
   @Get('/top/genres')
   @UseGuards(SessionAuthGuard)
-  async getTopGenres(@Session() session: Record<string, any>){
+  async getTopGenres(@Session() session: Record<string, any>) {
     const userId = session.userId;
     return this.dashboardService.getTopGenres(userId);
   }
