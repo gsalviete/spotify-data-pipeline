@@ -7,9 +7,10 @@ import { ResponseUserDto } from './dto/response-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) 
-  private userModel: Model<User>,
-) {}
+  constructor(
+    @InjectModel(User.name)
+    private userModel: Model<User>,
+  ) {}
 
   async findOrCreate(dto: CreateUserDto): Promise<User> {
     return await this.userModel
@@ -21,22 +22,22 @@ export class UserService {
       .exec();
   }
 
-  async me( spotifyId : string): Promise<ResponseUserDto> {     
-    const user = await this.userModel.findOne({ spotifyId })
+  async me(spotifyId: string): Promise<ResponseUserDto> {
+    const user = await this.userModel.findOne({ spotifyId });
 
-    if(!user){
+    if (!user) {
       throw new UnauthorizedException();
     }
 
-    const {email, avatarUrl, displayName} = user
+    const { email, avatarUrl, displayName } = user;
 
-    return {email, avatarUrl, displayName};
+    return { email, avatarUrl, displayName };
   }
 
-  async findUser(spotifyId: string){
-    const user = await this.userModel.findOne({ spotifyId })
+  async findUser(spotifyId: string) {
+    const user = await this.userModel.findOne({ spotifyId });
 
-    if(!user){
+    if (!user) {
       throw new UnauthorizedException();
     }
 
