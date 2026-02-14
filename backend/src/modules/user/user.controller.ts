@@ -4,21 +4,19 @@ import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
-    constructor(
-        private readonly userService: UserService
-    ){}
+  constructor(private readonly userService: UserService) {}
 
-    @Get('me')
-    @UseGuards(SessionAuthGuard)
-    async me(@Session() session: Record<string, any>){
-        const userId = session.userId;
-        
-        return await this.userService.me(userId);
-    }
+  @Get('me')
+  @UseGuards(SessionAuthGuard)
+  async me(@Session() session: Record<string, any>) {
+    const userId = session.userId;
 
-    @Get()
-    async findUser(@Session() session: Record<string, any>){
-        const userId = session.userId;
-        return await this.userService.findUser(userId);
-    }
+    return await this.userService.me(userId);
+  }
+
+  @Get()
+  async findUser(@Session() session: Record<string, any>) {
+    const userId = session.userId;
+    return await this.userService.findUser(userId);
+  }
 }
