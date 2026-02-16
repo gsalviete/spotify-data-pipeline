@@ -34,6 +34,10 @@ export class UserService {
     return { email, avatarUrl, displayName };
   }
 
+  async updateTokens(spotifyId: string, tokens: { accessToken: string; refreshToken: string }) {
+    await this.userModel.findOneAndUpdate({ spotifyId }, tokens);
+  }
+
   async findUser(spotifyId: string) {
     const user = await this.userModel.findOne({ spotifyId });
 
