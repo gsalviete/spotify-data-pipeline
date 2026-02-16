@@ -1,7 +1,5 @@
 import type { SpotifyArtist, SpotifyTrack, GenreCount, UserProfile } from '../types/spotify';
 
-const BACKEND_URL = 'http://127.0.0.1:3000';
-
 async function request<T>(path: string): Promise<T> {
   const res = await fetch(path, {
     credentials: 'include',
@@ -21,22 +19,22 @@ async function request<T>(path: string): Promise<T> {
 
 export const api = {
   login() {
-    window.location.assign(`${BACKEND_URL}/auth/login`);
+    window.location.assign('http://127.0.0.1:3000/auth/login');
   },
 
   getMe() {
-    return request<UserProfile>('/user/me');
+    return request<UserProfile>('/api/user/me');
   },
 
   getTopArtists() {
-    return request<SpotifyArtist[]>('/dashboard/top/artists');
+    return request<SpotifyArtist[]>('/api/dashboard/top/artists');
   },
 
   getTopTracks() {
-    return request<SpotifyTrack[]>('/dashboard/top/tracks');
+    return request<SpotifyTrack[]>('/api/dashboard/top/tracks');
   },
 
   getTopGenres() {
-    return request<GenreCount[]>('/dashboard/top/genres');
+    return request<GenreCount[]>('/api/dashboard/top/genres');
   },
 };
