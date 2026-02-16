@@ -10,5 +10,6 @@ import { HttpModule } from '@nestjs/axios';
   imports: [PassportModule, UserModule, HttpModule],
   controllers: [AuthController],
   providers: [AuthService, SpotifyStrategy],
+  exports: [AuthService],
 })
 export class AuthModule {}
