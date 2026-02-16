@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as session from 'express-session';
 import { ConfigService } from '@nestjs/config';
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -17,11 +16,11 @@ async function bootstrap() {
       resave: false,
       saveUninitialized: true,
       cookie: {
-      secure: false,
-      httpOnly: true,
-      maxAge: 1000 * 60 * 10,
-      sameSite: 'lax',
-    },
+        secure: false,
+        httpOnly: true,
+        maxAge: 1000 * 60 * 10,
+        sameSite: 'lax',
+      },
     }),
   );
 

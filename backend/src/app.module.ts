@@ -7,6 +7,8 @@ import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/user/user.module';
 import { envValidationSchema } from './config/env.validation';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
+import { SpotifyTokenInterceptor } from './common/interceptors/refresh-token.interceptor';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -26,6 +28,11 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
     DashboardModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: SpotifyTokenInterceptor
+    }
+  ],
 })
 export class AppModule {}
