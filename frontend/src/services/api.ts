@@ -37,4 +37,16 @@ export const api = {
   getTopGenres() {
     return request<GenreCount[]>('/api/dashboard/top/genres');
   },
+
+  getRecentlyPlayed() {
+    return request<any[]>('/api/dashboard/recently-played');
+  },
+
+  async logout() {
+    await fetch('/api/auth/logout', {
+      method: 'POST',
+      credentials: 'include',
+    });
+    window.location.href = '/';
+  },
 };

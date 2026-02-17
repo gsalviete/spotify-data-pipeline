@@ -1,11 +1,31 @@
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useDashboardData } from '../hooks/useDashboardData';
 import { api } from '../services/api';
-import TopArtists from '../components/TopArtists';
-import TopTracks from '../components/TopTracks';
-import TopGenres from '../components/TopGenres';
-import './Dashboard.css';
+import type { RecentlyPlayedItem, UserProfile } from '../types/spotify';
+import './RecentlyPlayed.css';
+
+function formatDuration(ms: number) {
+  const min = Math.floor(ms / 60000);
+  const sec = Math.floor((ms % 60000) / 1000);
+  return `${min}:${sec.toString().padStart(2, '0')}`;
+}
+
+function timeAgo(isoDate: string): string {
+  const now = Date.now();
+  const then = new Date(isoDate).getTime();
+  const diffMs = now - then;
+
+  const minutes = Math.floor(diffMs / 60000);
+  const hours = Math.floor(diffMs / 3600000);
+  const days = Math.floor(diffMs / 86400000);
+
+  if (minutes < 1) return 'agora';
+  if (minutes < 60) return `há ${minutes} min`;
+  if (hours < 24) return `há ${hours}h`;
+  if (days === 1) return 'há 1 dia';
+  return `há ${days} dias`;
+}
 
 const navItems = [
   {
@@ -34,12 +54,33 @@ const navItems = [
   },
 ];
 
-export default function Dashboard() {
+export default function RecentlyPlayed() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, artists, tracks, genres, loading, error } = useDashboardData();
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [items, setItems] = useState<RecentlyPlayedItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const currentPath = location.pathname;
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const [userData, recentData] = await Promise.all([
+          api.getMe(),
+          api.getRecentlyPlayed(),
+        ]);
+        setUser(userData);
+        setItems(recentData);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load data');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
 
   if (loading) {
     return (
@@ -120,65 +161,52 @@ export default function Dashboard() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.3 }}
             >
-              Overview
+              Tocadas Recentemente
             </motion.h1>
-            <p className="dash-header-subtitle">Últimos 6 meses de atividade</p>
+            <p className="dash-header-subtitle">Suas últimas músicas ouvidas</p>
           </div>
         </header>
 
         <div className="dash-content">
-          <div className="overview-top-row">
-            <motion.section
-              className="overview-section overview-section--half"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              <h2 className="overview-section-title">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                  <circle cx="9" cy="7" r="4" />
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                </svg>
-                Top Artistas
-              </h2>
-              <TopArtists artists={artists} />
-            </motion.section>
-
-            <motion.section
-              className="overview-section overview-section--half"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-            >
-              <h2 className="overview-section-title">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="5.5" cy="17.5" r="2.5" />
-                  <circle cx="17.5" cy="15.5" r="2.5" />
-                  <path d="M8 17V5l12-2v12" />
-                </svg>
-                Top Faixas
-              </h2>
-              <TopTracks tracks={tracks} />
-            </motion.section>
+          <div className="recent-list">
+            {items.map((item, index) => (
+              <motion.a
+                key={`${item.track.id}-${item.played_at}`}
+                href={item.track.external_urls.spotify}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="recent-card"
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.025, duration: 0.35 }}
+              >
+                <div className="recent-cover-wrapper">
+                  {item.track.album.images[0] ? (
+                    <img
+                      src={item.track.album.images[item.track.album.images.length > 1 ? 1 : 0].url}
+                      alt={item.track.album.name}
+                      className="recent-cover"
+                    />
+                  ) : (
+                    <div className="recent-cover recent-cover--placeholder" />
+                  )}
+                  <div className="recent-play-overlay">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff">
+                      <polygon points="5,3 19,12 5,21" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="recent-info">
+                  <span className="recent-name">{item.track.name}</span>
+                  <span className="recent-artist">
+                    {item.track.artists.map((a) => a.name).join(', ')}
+                  </span>
+                </div>
+                <span className="recent-duration">{formatDuration(item.track.duration_ms)}</span>
+                <span className="recent-time">{timeAgo(item.played_at)}</span>
+              </motion.a>
+            ))}
           </div>
-
-          <motion.section
-            className="overview-section"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-          >
-            <h2 className="overview-section-title">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
-                <path d="M22 12A10 10 0 0 0 12 2v10z" />
-              </svg>
-              Top Gêneros
-            </h2>
-            <TopGenres genres={genres} />
-          </motion.section>
         </div>
       </main>
     </div>

@@ -37,6 +37,11 @@ export interface GenreCount {
   count: number;
 }
 
+export interface RecentlyPlayedItem {
+  track: SpotifyTrack;
+  played_at: string;
+}
+
 export interface UserProfile {
   email: string;
   avatarUrl?: string;

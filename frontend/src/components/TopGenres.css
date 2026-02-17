@@ -1,21 +1,19 @@
 .top-genres {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
-.top-genres-charts {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 24px;
+  align-items: start;
 }
 
-.top-genres-radar,
-.top-genres-pie {
+.top-genres-radar {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 16px;
   padding: 24px;
+}
+
+.chart-container {
+  width: 100%;
 }
 
 .top-genres-list {
@@ -23,6 +21,14 @@
   border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 16px;
   padding: 24px;
+}
+
+.top-genres-list-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 16px;
+  letter-spacing: 0.3px;
 }
 
 .genres-tags {
@@ -66,7 +72,11 @@
 }
 
 @media (max-width: 900px) {
-  .top-genres-charts {
+  .top-genres {
     grid-template-columns: 1fr;
+  }
+
+  .top-genres-radar {
+    padding: 16px;
   }
 }
