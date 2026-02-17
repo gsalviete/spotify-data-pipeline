@@ -12,8 +12,14 @@ export class DashboardService {
     private readonly userService: UserService,
   ) {}
 
-  async getTopArtists(userId: string) {
+  async getTopArtists(userId: string, timeRange?: string) {
     const user = await this.userService.findUser(userId);
+
+    const validRanges = ['short_term', 'medium_term', 'long_term'];
+
+    const range = validRanges.includes(timeRange!)
+      ? timeRange
+      : 'medium_term';
 
     const response = await firstValueFrom(
       this.httpService.get('https://api.spotify.com/v1/me/top/artists', {
@@ -21,7 +27,7 @@ export class DashboardService {
           Authorization: `Bearer ${user.accessToken}`,
         },
         params: {
-          time_range: 'medium_term',
+          time_range: range,
           limit: 20,
           offset: 0,
         },
@@ -30,8 +36,14 @@ export class DashboardService {
     return response.data.items;
   }
 
-  async getTopTracks(userId: string) {
+  async getTopTracks(userId: string, timeRange?: string) {
     const user = await this.userService.findUser(userId);
+
+    const validRanges = ['short_term', 'medium_term', 'long_term'];
+
+    const range = validRanges.includes(timeRange!)
+      ? timeRange
+      : 'medium_term';
 
     const response = await firstValueFrom(
       this.httpService.get('https://api.spotify.com/v1/me/top/tracks', {
@@ -39,7 +51,7 @@ export class DashboardService {
           Authorization: `Bearer ${user.accessToken}`,
         },
         params: {
-          time_range: 'medium_term',
+          time_range: range,
           limit: 20,
           offset: 0,
         },
@@ -48,8 +60,8 @@ export class DashboardService {
     return response.data.items;
   }
 
-  async getTopGenres(userId: string) {
-    const artists = await this.getTopArtists(userId);
+  async getTopGenres(userId: string, timeRange?: string) {
+    const artists = await this.getTopArtists(userId, timeRange);
 
     const genreCount: Record<string, number> = {};
 

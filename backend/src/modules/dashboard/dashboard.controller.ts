@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Session } from '@nestjs/common';
+import { Controller, Get, UseGuards, Session, Query } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
 import { SessionAuthGuard } from '../../common/guards/session-auth.guard';
 
@@ -8,23 +8,23 @@ export class DashboardController {
 
   @Get('/top/artists')
   @UseGuards(SessionAuthGuard)
-  async getTopArtists(@Session() session: Record<string, any>) {
+  async getTopArtists(@Session() session: Record<string, any>, @Query('time_range') timeRange: string) {
     const userId = session.userId;
-    return this.dashboardService.getTopArtists(userId);
+    return this.dashboardService.getTopArtists(userId, timeRange);
   }
 
   @Get('/top/tracks')
   @UseGuards(SessionAuthGuard)
-  async getTopTracks(@Session() session: Record<string, any>) {
+  async getTopTracks(@Session() session: Record<string, any>, @Query('time_range') timeRange: string) {
     const userId = session.userId;
-    return this.dashboardService.getTopTracks(userId);
+    return this.dashboardService.getTopTracks(userId, timeRange);
   }
 
   @Get('/top/genres')
   @UseGuards(SessionAuthGuard)
-  async getTopGenres(@Session() session: Record<string, any>) {
+  async getTopGenres(@Session() session: Record<string, any>, @Query('time_range') timeRange: string) {
     const userId = session.userId;
-    return this.dashboardService.getTopGenres(userId);
+    return this.dashboardService.getTopGenres(userId, timeRange);
   }
 
   @Get('/recently-played')
