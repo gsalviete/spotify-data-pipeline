@@ -68,4 +68,19 @@ export class DashboardService {
 
     return sortedGenres;
   }
+
+  async getRecentlyPlayed(userId: string ){
+    const user = await this.userService.findUser(userId);
+    const response = await firstValueFrom(
+      this.httpService.get('https://api.spotify.com/v1/me/player/recently-played', {
+        headers: {
+          Authorization: `Bearer ${user.accessToken}`,
+        },
+        params: {
+          limit: 20,
+        },
+      }),
+    );
+    return response.data.items;
+  }
 }
