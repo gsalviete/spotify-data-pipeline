@@ -34,4 +34,9 @@ export class DashboardController {
     const userId = session.userId
     return this.dashboardService.getRecentlyPlayed(userId);
   }
+  
+  @Get('/overview')
+    async getOverview(@Session() session, @Query('time_range') timeRange: TimeRange) {
+    return this.dashboardService.getOverview(session.userId, timeRange);
+}
 }

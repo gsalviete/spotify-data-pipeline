@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../user/user.service';
 import { firstValueFrom } from 'rxjs';
-import { resolveTimeRange } from 'src/common/utils/term-util';
+import { resolveTimeRange, TimeRange } from 'src/common/utils/term-util';
 
 @Injectable()
 export class DashboardService {
@@ -13,7 +13,7 @@ export class DashboardService {
     private readonly userService: UserService,
   ) {}
 
-  async getTopArtists(userId: string, timeRange?: string) {
+  async getTopArtists(userId: string, timeRange?: TimeRange) {
     const user = await this.userService.findUser(userId);
 
     const range = resolveTimeRange(timeRange);
@@ -33,7 +33,7 @@ export class DashboardService {
     return response.data.items;
   }
 
-  async getTopTracks(userId: string, timeRange?: string) {
+  async getTopTracks(userId: string, timeRange?: TimeRange) {
     const user = await this.userService.findUser(userId);
 
     const range = resolveTimeRange(timeRange);
@@ -53,7 +53,7 @@ export class DashboardService {
     return response.data.items;
   }
 
-  async getTopGenres(userId: string, timeRange?: string) {
+  async getTopGenres(userId: string, timeRange?: TimeRange) {
     const artists = await this.getTopArtists(userId, timeRange);
 
     const genreCount: Record<string, number> = {};
@@ -87,5 +87,16 @@ export class DashboardService {
       }),
     );
     return response.data.items;
+  }
+
+  async getOverview(userId: string, timeRange?: TimeRange){
+    const [ tracks, artists, genres, recentlyPlayed ] = await Promise.all([
+      this.getTopTracks(userId, timeRange),
+      this.getTopArtists(userId, timeRange),
+      this.getTopGenres(userId, timeRange),
+      this.getRecentlyPlayed(userId)
+    ]);
+    
+    return { tracks, artists, genres, recentlyPlayed};
   }
 }
