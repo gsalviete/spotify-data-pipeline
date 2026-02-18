@@ -7,4 +7,5 @@ export const envValidationSchema = Joi.object({
   SPOTIFY_CLIENT_ID: Joi.string().required(),
   SPOTIFY_CLIENT_SECRET: Joi.string().required(),
   SPOTIFY_REDIRECT_URI: Joi.string().uri().required(),
+  GEMINI_API_KEY: Joi.string().required()
 });
