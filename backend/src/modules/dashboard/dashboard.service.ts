@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from '../user/user.service';
 import { firstValueFrom } from 'rxjs';
+import { resolveTimeRange } from 'src/common/utils/term-util';
 
 @Injectable()
 export class DashboardService {
@@ -15,11 +16,7 @@ export class DashboardService {
   async getTopArtists(userId: string, timeRange?: string) {
     const user = await this.userService.findUser(userId);
 
-    const validRanges = ['short_term', 'medium_term', 'long_term'];
-
-    const range = validRanges.includes(timeRange!)
-      ? timeRange
-      : 'medium_term';
+    const range = resolveTimeRange(timeRange);
 
     const response = await firstValueFrom(
       this.httpService.get('https://api.spotify.com/v1/me/top/artists', {
@@ -39,11 +36,7 @@ export class DashboardService {
   async getTopTracks(userId: string, timeRange?: string) {
     const user = await this.userService.findUser(userId);
 
-    const validRanges = ['short_term', 'medium_term', 'long_term'];
-
-    const range = validRanges.includes(timeRange!)
-      ? timeRange
-      : 'medium_term';
+    const range = resolveTimeRange(timeRange);
 
     const response = await firstValueFrom(
       this.httpService.get('https://api.spotify.com/v1/me/top/tracks', {
