@@ -8,5 +8,6 @@ import { UserModule } from '../user/user.module';
   imports: [HttpModule, UserModule],
   controllers: [DashboardController],
   providers: [DashboardService],
+  exports: [DashboardService]
 })
 export class DashboardModule {}
