@@ -19,10 +19,10 @@ export default function TopArtists({ artists }: Props) {
             target="_blank"
             rel="noopener noreferrer"
             className="artist-card"
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.04, duration: 0.4 }}
-            whileHover={{ y: -3 }}
+            whileHover={{ y: -2 }}
             title={`Popularidade: ${artist.popularity}`}
           >
             <div className="artist-rank">#{index + 1}</div>

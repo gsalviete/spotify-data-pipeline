@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useDashboardData } from '../hooks/useDashboardData';
 import { api } from '../services/api';
+import type { TimeRange } from '../services/api';
 import TopArtists from '../components/TopArtists';
 import TopTracks from '../components/TopTracks';
 import TopGenres from '../components/TopGenres';
@@ -34,10 +36,17 @@ const navItems = [
   },
 ];
 
+const timeRangeOptions: { key: TimeRange; label: string }[] = [
+  { key: 'short_term', label: '4 semanas' },
+  { key: 'medium_term', label: '6 meses' },
+  { key: 'long_term', label: 'Todo período' },
+];
+
 export default function Dashboard() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, artists, tracks, genres, loading, error } = useDashboardData();
+  const [timeRange, setTimeRange] = useState<TimeRange>('medium_term');
+  const { user, artists, tracks, genres, loading, error } = useDashboardData(timeRange);
 
   const currentPath = location.pathname;
 
@@ -122,7 +131,20 @@ export default function Dashboard() {
             >
               Overview
             </motion.h1>
-            <p className="dash-header-subtitle">Últimos 6 meses de atividade</p>
+            <p className="dash-header-subtitle">
+              {timeRangeOptions.find((o) => o.key === timeRange)?.label}
+            </p>
+          </div>
+          <div className="dash-time-filters">
+            {timeRangeOptions.map((option) => (
+              <button
+                key={option.key}
+                className={`dash-time-btn ${timeRange === option.key ? 'dash-time-btn--active' : ''}`}
+                onClick={() => setTimeRange(option.key)}
+              >
+                {option.label}
+              </button>
+            ))}
           </div>
         </header>
 

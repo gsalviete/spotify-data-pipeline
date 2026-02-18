@@ -1,5 +1,7 @@
 import type { SpotifyArtist, SpotifyTrack, GenreCount, UserProfile } from '../types/spotify';
 
+export type TimeRange = 'short_term' | 'medium_term' | 'long_term';
+
 async function request<T>(path: string): Promise<T> {
   const res = await fetch(path, {
     credentials: 'include',
@@ -26,16 +28,16 @@ export const api = {
     return request<UserProfile>('/api/user/me');
   },
 
-  getTopArtists() {
-    return request<SpotifyArtist[]>('/api/dashboard/top/artists');
+  getTopArtists(timeRange: TimeRange = 'medium_term') {
+    return request<SpotifyArtist[]>(`/api/dashboard/top/artists?time_range=${timeRange}`);
   },
 
-  getTopTracks() {
-    return request<SpotifyTrack[]>('/api/dashboard/top/tracks');
+  getTopTracks(timeRange: TimeRange = 'medium_term') {
+    return request<SpotifyTrack[]>(`/api/dashboard/top/tracks?time_range=${timeRange}`);
   },
 
-  getTopGenres() {
-    return request<GenreCount[]>('/api/dashboard/top/genres');
+  getTopGenres(timeRange: TimeRange = 'medium_term') {
+    return request<GenreCount[]>(`/api/dashboard/top/genres?time_range=${timeRange}`);
   },
 
   getRecentlyPlayed() {

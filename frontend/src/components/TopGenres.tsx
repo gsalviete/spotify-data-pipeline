@@ -70,22 +70,29 @@ export default function TopGenres({ genres }: Props) {
         </div>
       </div>
 
-      <div className="top-genres-list">
-        <h3 className="top-genres-list-title">Todos os gêneros</h3>
-        <div className="genres-tags">
-          {genres.map((g, index) => (
+      <div className="top-genres-ranking">
+        <h3 className="genres-ranking-title">Ranking</h3>
+        <div className="genres-ranking-list">
+          {topGenres.map((g, index) => (
             <motion.div
               key={g.genre}
-              className="genre-tag"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: index * 0.03, duration: 0.3 }}
-              style={{
-                '--intensity': `${(g.count / maxCount) * 100}%`,
-              } as React.CSSProperties}
+              className="genre-rank-item"
+              initial={{ opacity: 0, x: 12 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.04, duration: 0.35 }}
             >
-              <span className="genre-tag-name">{g.genre}</span>
-              <span className="genre-tag-count">{g.count}</span>
+              <span className="genre-rank-pos">{index + 1}</span>
+              <div className="genre-rank-content">
+                <span className="genre-rank-name">{g.genre}</span>
+                <div className="genre-rank-bar">
+                  <motion.div
+                    className="genre-rank-bar-fill"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${(g.count / maxCount) * 100}%` }}
+                    transition={{ delay: index * 0.04 + 0.2, duration: 0.5, ease: 'easeOut' }}
+                  />
+                </div>
+              </div>
             </motion.div>
           ))}
         </div>

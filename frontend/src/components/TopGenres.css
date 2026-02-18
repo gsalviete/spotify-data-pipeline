@@ -16,59 +16,82 @@
   width: 100%;
 }
 
-.top-genres-list {
+/* Ranking List */
+.top-genres-ranking {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 16px;
-  padding: 24px;
+  padding: 28px;
 }
 
-.top-genres-list-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0 0 16px;
-  letter-spacing: 0.3px;
+.genres-ranking-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin: 0 0 20px;
 }
 
-.genres-tags {
+.genres-ranking-list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.genre-tag {
-  display: inline-flex;
+.genre-rank-item {
+  display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  background: rgba(29, 185, 84, calc(var(--intensity) * 0.003));
-  border: 1px solid rgba(29, 185, 84, calc(var(--intensity) * 0.005 + 0.08));
-  border-radius: 500px;
-  transition: all 0.2s;
+  gap: 14px;
+  padding: 8px 0;
 }
 
-.genre-tag:hover {
-  background: rgba(29, 185, 84, 0.15);
-  border-color: rgba(29, 185, 84, 0.3);
-  transform: translateY(-1px);
-}
-
-.genre-tag-name {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 13px;
-  font-weight: 500;
-  text-transform: capitalize;
-}
-
-.genre-tag-count {
-  color: #1db954;
+.genre-rank-pos {
+  width: 20px;
+  color: rgba(255, 255, 255, 0.2);
   font-size: 12px;
   font-weight: 700;
-  background: rgba(29, 185, 84, 0.1);
-  padding: 2px 8px;
-  border-radius: 500px;
+  text-align: right;
+  flex-shrink: 0;
   font-variant-numeric: tabular-nums;
+}
+
+.genre-rank-item:nth-child(1) .genre-rank-pos,
+.genre-rank-item:nth-child(2) .genre-rank-pos,
+.genre-rank-item:nth-child(3) .genre-rank-pos {
+  color: #1db954;
+}
+
+.genre-rank-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.genre-rank-name {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.genre-rank-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.genre-rank-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1db954, #1ed760);
+  border-radius: 2px;
 }
 
 @media (max-width: 900px) {
