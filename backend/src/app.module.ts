@@ -9,6 +9,7 @@ import { envValidationSchema } from './config/env.validation';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { SpotifyTokenInterceptor } from './common/interceptors/refresh-token.interceptor';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ChatbotModule } from './modules/chatbot/chatbot.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     AuthModule,
     UserModule,
     DashboardModule,
+    ChatbotModule,
   ],
   controllers: [AppController],
   providers: [AppService,
