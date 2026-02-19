@@ -44,6 +44,27 @@ export const api = {
     return request<any[]>('/api/dashboard/recently-played');
   },
 
+  async chat(basedOn: string[], message: string) {
+    const res = await fetch('/api/chatbot', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ basedOn, message }),
+    });
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    return res.json() as Promise<{
+      explanation: string;
+      items: {
+        id: string;
+        name: string;
+        type: 'track' | 'artist' | 'album';
+        imageUrl: string;
+        spotifyUrl: string;
+        artist?: string;
+      }[];
+    }>;
+  },
+
   async logout() {
     await fetch('/api/auth/logout', {
       method: 'POST',
