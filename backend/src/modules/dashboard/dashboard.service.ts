@@ -96,7 +96,18 @@ export class DashboardService {
       this.getTopGenres(userId, timeRange),
       this.getRecentlyPlayed(userId)
     ]);
-    
+
     return { tracks, artists, genres, recentlyPlayed};
+  }
+
+  async searchSpotify(userId: string, query: string, type: 'track' | 'artist' | 'album') {
+    const user = await this.userService.findUser(userId);
+    const response = await firstValueFrom(
+      this.httpService.get('https://api.spotify.com/v1/search', {
+        headers: { Authorization: `Bearer ${user.accessToken}` },
+        params: { q: query, type, limit: 1 },
+      }),
+    );
+    return response.data;
   }
 }
