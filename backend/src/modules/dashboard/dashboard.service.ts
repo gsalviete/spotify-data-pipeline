@@ -53,25 +53,21 @@ export class DashboardService {
     return response.data.items;
   }
 
-  async getTopGenres(userId: string, timeRange?: TimeRange) {
-    const artists = await this.getTopArtists(userId, timeRange);
-
+  private computeGenres(artists: any[]) {
     const genreCount: Record<string, number> = {};
-
     for (const artist of artists) {
       for (const genre of artist.genres) {
         genreCount[genre] = (genreCount[genre] || 0) + 1;
       }
     }
-
-    const sortedGenres = Object.entries(genreCount)
-      .map(([genre, count]) => ({
-        genre,
-        count,
-      }))
+    return Object.entries(genreCount)
+      .map(([genre, count]) => ({ genre, count }))
       .sort((a, b) => b.count - a.count);
+  }
 
-    return sortedGenres;
+  async getTopGenres(userId: string, timeRange?: TimeRange) {
+    const artists = await this.getTopArtists(userId, timeRange);
+    return this.computeGenres(artists);
   }
 
   async getRecentlyPlayed(userId: string ){
@@ -90,14 +86,15 @@ export class DashboardService {
   }
 
   async getOverview(userId: string, timeRange?: TimeRange){
-    const [ tracks, artists, genres, recentlyPlayed ] = await Promise.all([
+    const [ tracks, artists, recentlyPlayed ] = await Promise.all([
       this.getTopTracks(userId, timeRange),
       this.getTopArtists(userId, timeRange),
-      this.getTopGenres(userId, timeRange),
-      this.getRecentlyPlayed(userId)
+      this.getRecentlyPlayed(userId),
     ]);
 
-    return { tracks, artists, genres, recentlyPlayed};
+    const genres = this.computeGenres(artists);
+
+    return { tracks, artists, genres, recentlyPlayed };
   }
 
   async searchSpotify(userId: string, query: string, type: 'track' | 'artist' | 'album') {
