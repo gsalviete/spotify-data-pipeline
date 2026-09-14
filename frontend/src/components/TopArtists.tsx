@@ -25,7 +25,7 @@ export default function TopArtists({ artists }: Props) {
             whileHover={{ y: -2 }}
             title={`Popularidade: ${artist.popularity}`}
           >
-            <div className="artist-rank">#{index + 1}</div>
+            <div className="artist-rank">{index + 1}</div>
             <div className="artist-img-wrapper">
               {artist.images[0] ? (
                 <img src={artist.images[0].url} alt={artist.name} className="artist-img" />

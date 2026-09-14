@@ -33,7 +33,7 @@ export default function TopTracks({ tracks }: Props) {
             onHoverStart={() => setHoveredTrack(track.id)}
             onHoverEnd={() => setHoveredTrack(null)}
           >
-            <div className="track-rank">#{index + 1}</div>
+            <div className="track-rank">{index + 1}</div>
             <div className="track-cover-wrapper">
               {track.album.images[0] ? (
                 <img
@@ -45,7 +45,7 @@ export default function TopTracks({ tracks }: Props) {
                 <div className="track-cover track-cover--placeholder" />
               )}
               <div className="track-play-overlay">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                   <polygon points="5,3 19,12 5,21" />
                 </svg>
               </div>

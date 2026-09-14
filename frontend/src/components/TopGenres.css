@@ -1,65 +1,63 @@
 .top-genres {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  align-items: start;
+  gap: var(--sp-6);
+  align-items: stretch;
 }
 
 .top-genres-radar {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 16px;
-  padding: 24px;
+  background: var(--surface-1);
+  border-radius: var(--r-md);
+  padding: var(--sp-6);
 }
 
 .chart-container {
   width: 100%;
 }
 
-/* Ranking List */
+/* ── Ranking list ────────────────────────────────────────── */
 .top-genres-ranking {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 16px;
-  padding: 28px;
+  background: var(--surface-1);
+  border-radius: var(--r-md);
+  padding: var(--sp-6);
 }
 
 .genres-ranking-title {
-  font-size: 11px;
+  font-size: var(--fs-small);
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.3);
+  line-height: 1;
+  color: var(--text-subdued);
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin: 0 0 20px;
+  letter-spacing: var(--ls-button-wide);
+  margin: 0 0 var(--sp-5);
 }
 
 .genres-ranking-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--sp-1);
 }
 
 .genre-rank-item {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 8px 0;
+  gap: var(--sp-3);
+  padding: var(--sp-2) 0;
 }
 
 .genre-rank-pos {
   width: 20px;
-  color: rgba(255, 255, 255, 0.2);
-  font-size: 12px;
-  font-weight: 700;
+  color: var(--text-subdued);
+  font-size: var(--fs-small);
+  font-weight: 400;
   text-align: right;
   flex-shrink: 0;
   font-variant-numeric: tabular-nums;
 }
 
-.genre-rank-item:nth-child(1) .genre-rank-pos,
-.genre-rank-item:nth-child(2) .genre-rank-pos,
-.genre-rank-item:nth-child(3) .genre-rank-pos {
-  color: #1db954;
+.genre-rank-item:nth-child(-n + 3) .genre-rank-pos {
+  color: var(--text-base);
+  font-weight: 700;
 }
 
 .genre-rank-content {
@@ -67,13 +65,14 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--sp-1);
 }
 
 .genre-rank-name {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 13px;
-  font-weight: 600;
+  color: var(--text-base);
+  font-size: var(--fs-button);
+  font-weight: 700;
+  line-height: 1.5;
   text-transform: capitalize;
   white-space: nowrap;
   overflow: hidden;
@@ -82,24 +81,25 @@
 
 .genre-rank-bar {
   width: 100%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 2px;
+  height: 4px;
+  background: var(--surface-3);
+  border-radius: var(--r-pill-full);
   overflow: hidden;
 }
 
 .genre-rank-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #1db954, #1ed760);
-  border-radius: 2px;
+  background: var(--green);
+  border-radius: var(--r-pill-full);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 896px) {
   .top-genres {
     grid-template-columns: 1fr;
   }
 
-  .top-genres-radar {
-    padding: 16px;
+  .top-genres-radar,
+  .top-genres-ranking {
+    padding: var(--sp-4);
   }
 }

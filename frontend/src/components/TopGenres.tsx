@@ -31,38 +31,33 @@ export default function TopGenres({ genres }: Props) {
         <div className="chart-container">
           <ResponsiveContainer width="100%" height={380}>
             <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="72%">
-              <PolarGrid
-                stroke="rgba(255,255,255,0.06)"
-                strokeDasharray="3 3"
-              />
+              <PolarGrid stroke="#4d4d4d" strokeDasharray="3 3" />
               <PolarAngleAxis
                 dataKey="genre"
-                tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 11 }}
+                tick={{ fill: '#b3b3b3', fontSize: 12, fontWeight: 400 }}
               />
-              <PolarRadiusAxis
-                tick={{ fill: 'rgba(255,255,255,0.2)', fontSize: 10 }}
-                axisLine={false}
-                domain={[0, maxCount]}
-              />
+              <PolarRadiusAxis tick={false} axisLine={false} domain={[0, maxCount]} />
               <Tooltip
+                cursor={{ stroke: '#7c7c7c' }}
                 contentStyle={{
-                  background: 'rgba(24,24,24,0.95)',
-                  border: '1px solid rgba(255,255,255,0.08)',
-                  borderRadius: '12px',
-                  padding: '10px 14px',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-                  fontFamily: 'Outfit',
+                  background: '#282828',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '12px 16px',
+                  boxShadow: 'rgba(0,0,0,0.5) 0px 8px 24px',
+                  fontFamily: 'var(--font-ui)',
+                  fontSize: 14,
                 }}
-                labelStyle={{ color: '#fff', fontWeight: 600 }}
-                itemStyle={{ color: '#1db954' }}
+                labelStyle={{ color: '#ffffff', fontWeight: 700 }}
+                itemStyle={{ color: '#b3b3b3' }}
                 formatter={(value) => [`${value} artistas`]}
               />
               <Radar
                 name="Gêneros"
                 dataKey="count"
-                stroke="#1db954"
-                fill="#1db954"
-                fillOpacity={0.2}
+                stroke="#1ed760"
+                fill="#1ed760"
+                fillOpacity={0.22}
                 strokeWidth={2}
               />
             </RadarChart>
