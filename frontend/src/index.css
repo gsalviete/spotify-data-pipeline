@@ -1,4 +1,80 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+/* Figtree is the closest freely-licensed stand-in for Circular / SpotifyMixUI */
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* ── Surfaces ────────────────────────────────────────── */
+  --bg-base: #121212;
+  --surface-1: #181818;
+  --surface-2: #1f1f1f;
+  --surface-3: #252525;
+  --surface-4: #272727;
+  --surface-hover: #2e2e2e;
+
+  /* Tinted overlay, for elements that must sit on an unknown surface */
+  --tint-high: rgba(255, 255, 255, 0.1);
+
+  /* ── Text ────────────────────────────────────────────── */
+  --text-base: #ffffff;
+  --text-near: #cbcbcb;
+  --text-subdued: #b3b3b3;
+  --text-muted: #7c7c7c;
+  --text-negative: #f3727f;
+  --text-warning: #ffa42b;
+  --text-announcement: #539df5;
+
+  /* ── Brand (functional only: play, active, primary CTA) ─ */
+  --green: #1ed760;
+  --green-hover: #22e767;
+  --green-press: #1db954;
+  --green-tint: rgba(30, 215, 96, 0.22);
+
+  /* ── Borders ─────────────────────────────────────────── */
+  --border: #4d4d4d;
+  --border-light: #7c7c7c;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+
+  /* ── Elevation ───────────────────────────────────────── */
+  --shadow-card: rgba(0, 0, 0, 0.3) 0px 8px 8px;
+  --shadow-dialog: rgba(0, 0, 0, 0.5) 0px 8px 24px;
+  --shadow-inset: rgb(18, 18, 18) 0px 1px 0px, rgb(124, 124, 124) 0px 0px 0px 1px inset;
+
+  /* ── Radius scale ────────────────────────────────────── */
+  --r-xs: 4px;
+  --r-md: 8px;
+  --r-lg: 10px;
+  --r-xl: 16px;
+  --r-pill: 500px;
+  --r-pill-full: 9999px;
+  --r-circle: 50%;
+
+  /* ── Spacing (8px base) ──────────────────────────────── */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+
+  /* ── Typography ──────────────────────────────────────── */
+  --font-ui: 'Figtree', CircularSp-Arab, CircularSp-Hebr, CircularSp-Cyrl, CircularSp-Grek,
+    CircularSp-Deva, 'Helvetica Neue', helvetica, arial, 'Hiragino Sans',
+    'Hiragino Kaku Gothic ProN', Meiryo, 'MS Gothic', sans-serif;
+  --font-title: var(--font-ui);
+
+  --fs-display: 28px;   /* login hero only — the one exception to the 10–24px app scale */
+  --fs-title: 24px;     /* section / page title  · 700 */
+  --fs-heading: 18px;   /* feature heading       · 600 · lh 1.3 */
+  --fs-body: 16px;      /* body                  · 400 */
+  --fs-button: 14px;    /* buttons, nav, caption */
+  --fs-small: 12px;     /* tags, counts */
+  --fs-badge: 10.5px;   /* badges */
+  --fs-micro: 10px;     /* fine print */
+
+  --ls-button: 1.4px;
+  --ls-button-wide: 2px;
+}
 
 *,
 *::before,
@@ -15,9 +91,11 @@ html {
 }
 
 body {
-  font-family: 'Outfit', sans-serif;
-  background: #0a0a0a;
-  color: #fff;
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  font-weight: 400;
+  background: var(--bg-base);
+  color: var(--text-base);
   overflow-x: hidden;
 }
 
@@ -28,10 +106,25 @@ a {
 
 button {
   cursor: pointer;
+  font-family: var(--font-ui);
+}
+
+:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+/* ── Button voice: uppercase + wide tracking ─────────────── */
+.u-btn-label {
+  font-size: var(--fs-button);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: var(--ls-button);
+  text-transform: uppercase;
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 12px;
 }
 
 ::-webkit-scrollbar-track {
@@ -39,24 +132,37 @@ button {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  background: var(--tint-high);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: var(--r-pill-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.3);
+  background-clip: padding-box;
 }
 
 ::selection {
-  background: rgba(29, 185, 84, 0.3);
-  color: #fff;
+  background: var(--green-tint);
+  color: var(--text-base);
 }
 
-/* Recharts overrides */
+/* ── Recharts overrides ──────────────────────────────────── */
 .recharts-tooltip-wrapper {
   outline: none !important;
 }
 
 .recharts-default-tooltip {
-  font-family: 'Outfit', sans-serif !important;
+  font-family: var(--font-ui) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
