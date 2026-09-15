@@ -36,7 +36,11 @@ export class DashboardController {
   }
   
   @Get('/overview')
-    async getOverview(@Session() session, @Query('time_range') timeRange: TimeRange) {
+  @UseGuards(SessionAuthGuard)
+  async getOverview(
+    @Session() session: Record<string, any>,
+    @Query('time_range') timeRange: TimeRange,
+  ) {
     return this.dashboardService.getOverview(session.userId, timeRange);
-}
+  }
 }
