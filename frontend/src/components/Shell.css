@@ -1,0 +1,333 @@
+.dash {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-base);
+  font-family: var(--font-ui);
+}
+
+/* ── Loading / error ─────────────────────────────────────── */
+.dash-loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-base);
+  color: var(--text-subdued);
+  font-family: var(--font-ui);
+  font-size: var(--fs-button);
+  gap: var(--sp-4);
+}
+
+.dash-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--surface-3);
+  border-top-color: var(--green);
+  border-radius: var(--r-circle);
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.dash-error {
+  color: var(--text-negative);
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.dash-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  height: 100vh;
+  background: var(--surface-1);
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-6) var(--sp-2);
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+}
+
+.dash-sidebar-logo {
+  padding: 0 var(--sp-3) var(--sp-8);
+  color: var(--green);
+}
+
+.dash-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  flex: 1;
+}
+
+.dash-nav-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: none;
+  border: none;
+  border-radius: var(--r-pill-full);
+  color: var(--text-subdued);
+  font-family: var(--font-ui);
+  font-size: var(--fs-button);
+  font-weight: 400;
+  cursor: pointer;
+  transition: color 0.2s;
+  text-align: left;
+}
+
+.dash-nav-btn:hover {
+  color: var(--text-base);
+}
+
+.dash-nav-btn--active {
+  color: var(--text-base);
+  font-weight: 700;
+}
+
+.dash-nav-indicator {
+  position: absolute;
+  inset: 0;
+  background: var(--surface-2);
+  border-radius: var(--r-pill-full);
+  z-index: -1;
+}
+
+/* ── User ────────────────────────────────────────────────── */
+.dash-user {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-3);
+  border-top: 1px solid var(--border-subtle);
+  margin-top: auto;
+}
+
+.dash-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-circle);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.dash-user-avatar--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--green);
+  color: #000000;
+  font-weight: 700;
+  font-size: var(--fs-button);
+}
+
+.dash-user-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.dash-user-name {
+  color: var(--text-base);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dash-user-email {
+  color: var(--text-subdued);
+  font-size: var(--fs-micro);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dash-logout-btn {
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--surface-2);
+  border: none;
+  border-radius: var(--r-circle);
+  color: var(--text-subdued);
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+
+.dash-logout-btn:hover {
+  color: var(--text-negative);
+  background: var(--surface-3);
+}
+
+/* ── Main ────────────────────────────────────────────────── */
+.dash-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dash-header {
+  padding: var(--sp-8) var(--sp-10) 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-6);
+}
+
+.dash-header-title {
+  font-family: var(--font-title);
+  font-size: var(--fs-title);
+  font-weight: 700;
+  color: var(--text-base);
+  margin: 0;
+}
+
+.dash-header-subtitle {
+  color: var(--text-subdued);
+  font-size: var(--fs-small);
+  font-weight: 400;
+  line-height: 1.5;
+  margin: var(--sp-1) 0 0;
+}
+
+/* ── Time range filters (dark pills) ─────────────────────── */
+.dash-time-filters {
+  display: flex;
+  gap: var(--sp-2);
+  flex-shrink: 0;
+}
+
+.dash-time-btn {
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--surface-2);
+  border: none;
+  border-radius: var(--r-pill-full);
+  color: var(--text-subdued);
+  font-family: var(--font-ui);
+  font-size: var(--fs-small);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: var(--ls-button);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.dash-time-btn:hover {
+  background: var(--surface-3);
+  color: var(--text-base);
+}
+
+.dash-time-btn--active {
+  background: var(--green);
+  color: #000000;
+}
+
+.dash-time-btn--active:hover {
+  background: var(--green-hover);
+  color: #000000;
+}
+
+.dash-content {
+  padding: var(--sp-8) var(--sp-10) var(--sp-10);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width: 896px) {
+  .dash-header,
+  .dash-content {
+    padding-left: var(--sp-6);
+    padding-right: var(--sp-6);
+  }
+}
+
+@media (max-width: 768px) {
+  .dash {
+    flex-direction: column;
+  }
+
+  .dash-sidebar {
+    width: 100%;
+    height: auto;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    flex-direction: row;
+    padding: var(--sp-3) var(--sp-4);
+    align-items: center;
+    gap: var(--sp-2);
+    overflow-x: auto;
+  }
+
+  .dash-sidebar-logo {
+    padding: 0 var(--sp-2) 0 0;
+    display: flex;
+    align-items: center;
+  }
+
+  .dash-nav {
+    flex-direction: row;
+    flex: 0;
+    gap: var(--sp-1);
+  }
+
+  .dash-nav-btn {
+    white-space: nowrap;
+    padding: var(--sp-2) var(--sp-3);
+  }
+
+  .dash-nav-btn span {
+    display: none;
+  }
+
+  .dash-user {
+    margin-left: auto;
+    margin-top: 0;
+    border-top: none;
+    padding: 0;
+  }
+
+  .dash-user-info {
+    display: none;
+  }
+
+  .dash-header {
+    padding: var(--sp-6) var(--sp-5) 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-4);
+  }
+
+  .dash-time-filters {
+    width: 100%;
+  }
+
+  .dash-time-btn {
+    flex: 1;
+    text-align: center;
+    padding: var(--sp-2) var(--sp-2);
+    letter-spacing: 1px;
+  }
+
+  .dash-content {
+    padding: var(--sp-5);
+    gap: var(--sp-8);
+  }
+}
