@@ -191,7 +191,7 @@ Retorne entre 3 e 6 recomendações.
 
   private async callLLM(prompt: string): Promise<string> {
     const response = await this.gemini.models.generateContent({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3.6-flash',
       contents: prompt,
     });
     return response.text ?? '';
