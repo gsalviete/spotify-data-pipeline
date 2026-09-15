@@ -53,7 +53,9 @@ export class DashboardService {
     return response.data.items;
   }
 
-  private computeGenres(artists: any[]) {
+  // static so one-off tooling can derive genres from a captured payload
+  // without standing up the whole service
+  static computeGenres(artists: any[]) {
     const genreCount: Record<string, number> = {};
     for (const artist of artists) {
       for (const genre of artist.genres) {
@@ -67,7 +69,7 @@ export class DashboardService {
 
   async getTopGenres(userId: string, timeRange?: TimeRange) {
     const artists = await this.getTopArtists(userId, timeRange);
-    return this.computeGenres(artists);
+    return DashboardService.computeGenres(artists);
   }
 
   async getRecentlyPlayed(userId: string ){
@@ -92,7 +94,7 @@ export class DashboardService {
       this.getRecentlyPlayed(userId),
     ]);
 
-    const genres = this.computeGenres(artists);
+    const genres = DashboardService.computeGenres(artists);
 
     return { tracks, artists, genres, recentlyPlayed };
   }
