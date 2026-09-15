@@ -1,0 +1,21 @@
+import { useCallback, useSyncExternalStore } from 'react';
+
+/**
+ * Subscribes to a CSS media query so components can adapt props that CSS
+ * can't reach — chart sizing, tick counts, and the like.
+ */
+export function useMediaQuery(query: string): boolean {
+  const subscribe = useCallback(
+    (onChange: () => void) => {
+      const list = window.matchMedia(query);
+      list.addEventListener('change', onChange);
+      return () => list.removeEventListener('change', onChange);
+    },
+    [query],
+  );
+
+  const getSnapshot = useCallback(() => window.matchMedia(query).matches, [query]);
+
+  // Nothing matches during SSR/hydration; the desktop layout is the safe default.
+  return useSyncExternalStore(subscribe, getSnapshot, () => false);
+}
