@@ -13,10 +13,4 @@ export class UserController {
 
     return await this.userService.me(userId);
   }
-
-  @Get()
-  async findUser(@Session() session: Record<string, any>) {
-    const userId = session.userId;
-    return await this.userService.findUser(userId);
-  }
 }
