@@ -57,6 +57,10 @@
   --sp-8: 32px;
   --sp-10: 40px;
 
+  /* ── Layout ──────────────────────────────────────────── */
+  /* Height of the mobile top bar — the page header sticks right under it. */
+  --dash-topbar-h: 56px;
+
   /* ── Typography ──────────────────────────────────────── */
   --font-ui: 'Figtree', CircularSp-Arab, CircularSp-Hebr, CircularSp-Cyrl, CircularSp-Grek,
     CircularSp-Deva, 'Helvetica Neue', helvetica, arial, 'Hiragino Sans',
