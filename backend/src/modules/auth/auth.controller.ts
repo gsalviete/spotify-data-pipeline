@@ -1,11 +1,15 @@
 import { Controller, Get, Query, Res, Session, Post } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { CallbackDto } from './dto/callback-dto';
 import { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @Get('login')
   async login(@Session() session: Record<string, any>, @Res() res: Response) {
@@ -24,7 +28,8 @@ export class AuthController {
     @Res() res: Response,
   ) {
     await this.authService.callback(session, dto);
-    res.redirect('http://127.0.0.1:5173/dashboard');
+    const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
+    res.redirect(`${frontendUrl}/dashboard`);
   }
 
   @Post('logout')
