@@ -16,11 +16,28 @@ async function bootstrap() {
   const mongoUri = configService.getOrThrow<string>('MONGODB_URI');
   const isProduction = configService.get<string>('NODE_ENV') === 'prod';
 
+  // TEMPORARY (remove once the production 401 is diagnosed): prints the cookie
+  // configuration this process actually resolved at boot. An unset NODE_ENV
+  // silently validates to 'dev', which downgrades the cookie to SameSite=Lax.
+  console.log(
+    '[TEMP][boot] NODE_ENV=%j isProduction=%s cookie.secure=%s cookie.sameSite=%s frontendUrl=%j',
+    configService.get<string>('NODE_ENV'),
+    isProduction,
+    isProduction,
+    isProduction ? 'none' : 'lax',
+    frontendUrl,
+  );
+
   if (isProduction) {
     // Render terminates TLS on a proxy, so without this express sees a plain
     // http request and refuses to send the `secure` cookie.
     app.set('trust proxy', 1);
   }
+
+  app.enableCors({
+    origin: frontendUrl,
+    credentials: true,
+  });
 
   app.use(
     session({
@@ -46,11 +63,6 @@ async function bootstrap() {
       transform: true,
     }),
   );
-
-  app.enableCors({
-    origin: frontendUrl,
-    credentials: true,
-  });
 
   await app.listen(process.env.PORT ?? 3000);
 }
