@@ -13,6 +13,8 @@ export class SpotifyStrategy extends PassportStrategy(Strategy, 'spotify') {
       scope: [
         'user-read-private',
         'user-read-email',
+        'user-top-read',
+        'user-read-recently-played',
         'playlist-modify-private',
         'playlist-read-collaborative',
       ],
