@@ -263,17 +263,18 @@
     flex-direction: column;
   }
 
+  /* Fixed height so the page header below knows exactly where to stick. */
   .dash-sidebar {
     width: 100%;
-    height: auto;
+    height: var(--dash-topbar-h);
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 20;
     flex-direction: row;
-    padding: var(--sp-3) var(--sp-4);
+    padding: var(--sp-2) var(--sp-4);
     align-items: center;
     gap: var(--sp-2);
-    overflow-x: auto;
+    border-bottom: 1px solid var(--border-subtle);
   }
 
   .dash-sidebar-logo {
@@ -304,30 +305,53 @@
     padding: 0;
   }
 
+  .dash-user-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
   .dash-user-info {
     display: none;
   }
 
+  /* Title + range filters stay pinned under the top bar while the page scrolls. */
   .dash-header {
-    padding: var(--sp-6) var(--sp-5) 0;
+    position: sticky;
+    top: var(--dash-topbar-h);
+    z-index: 15;
+    background: var(--bg-base);
+    padding: var(--sp-4) var(--sp-5) var(--sp-3);
     flex-direction: column;
-    align-items: flex-start;
-    gap: var(--sp-4);
+    align-items: stretch;
+    gap: var(--sp-3);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .dash-header-title {
+    line-height: 1.2;
+  }
+
+  .dash-header-subtitle {
+    margin-top: 2px;
   }
 
   .dash-time-filters {
     width: 100%;
   }
 
+  /* Three pills have to share the width — trim the type so none gets clipped. */
   .dash-time-btn {
     flex: 1;
+    min-width: 0;
     text-align: center;
-    padding: var(--sp-2) var(--sp-2);
-    letter-spacing: 1px;
+    padding: var(--sp-3) var(--sp-2);
+    font-size: var(--fs-badge);
+    letter-spacing: 0.5px;
   }
 
+  /* Bottom room so the chat FAB never covers the last row. */
   .dash-content {
-    padding: var(--sp-5);
-    gap: var(--sp-8);
+    padding: var(--sp-5) var(--sp-5) 88px;
+    gap: var(--sp-6);
   }
 }

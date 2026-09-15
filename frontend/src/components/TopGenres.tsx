@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from 'recharts';
 import type { GenreCount } from '../types/spotify';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import './TopGenres.css';
 
 interface Props {
@@ -16,9 +17,13 @@ interface Props {
 }
 
 export default function TopGenres({ genres }: Props) {
+  const narrow = useMediaQuery('(max-width: 600px)');
   const topGenres = genres.slice(0, 10);
-  const radarData = topGenres.map((g) => ({
-    genre: g.genre.length > 14 ? g.genre.slice(0, 14) + '...' : g.genre,
+
+  // Ten spokes with long labels turn to mush at phone width — thin them out.
+  const labelLimit = narrow ? 9 : 14;
+  const radarData = topGenres.slice(0, narrow ? 6 : 10).map((g) => ({
+    genre: g.genre.length > labelLimit ? g.genre.slice(0, labelLimit) + '...' : g.genre,
     fullGenre: g.genre,
     count: g.count,
   }));
@@ -29,12 +34,12 @@ export default function TopGenres({ genres }: Props) {
     <div className="top-genres">
       <div className="top-genres-radar">
         <div className="chart-container">
-          <ResponsiveContainer width="100%" height={380}>
-            <RadarChart data={radarData} cx="50%" cy="50%" outerRadius="72%">
+          <ResponsiveContainer width="100%" height={narrow ? 260 : 380}>
+            <RadarChart data={radarData} cx="50%" cy="50%" outerRadius={narrow ? '62%' : '72%'}>
               <PolarGrid stroke="#4d4d4d" strokeDasharray="3 3" />
               <PolarAngleAxis
                 dataKey="genre"
-                tick={{ fill: '#b3b3b3', fontSize: 12, fontWeight: 400 }}
+                tick={{ fill: '#b3b3b3', fontSize: narrow ? 10 : 12, fontWeight: 400 }}
               />
               <PolarRadiusAxis tick={false} axisLine={false} domain={[0, maxCount]} />
               <Tooltip

@@ -137,9 +137,9 @@ export default function Share() {
       <div className="share-layout">
         {/* ── Controls ─────────────────────────────────────── */}
         <div className="share-controls">
-          <fieldset className="share-group">
-            <legend className="share-group-label">Modelo</legend>
-            <div className="share-options">
+          <div className="share-group" role="group" aria-labelledby="share-template-label">
+            <span className="share-group-label" id="share-template-label">Modelo</span>
+            <div className="share-options share-options--templates">
               {templates.map((option) => (
                 <button
                   key={option.key}
@@ -151,11 +151,11 @@ export default function Share() {
                 </button>
               ))}
             </div>
-          </fieldset>
+          </div>
 
-          <fieldset className="share-group">
-            <legend className="share-group-label">Formato</legend>
-            <div className="share-options">
+          <div className="share-group" role="group" aria-labelledby="share-format-label">
+            <span className="share-group-label" id="share-format-label">Formato</span>
+            <div className="share-options share-options--formats">
               {formats.map((option) => (
                 <button
                   key={option.key}
@@ -168,7 +168,7 @@ export default function Share() {
                 </button>
               ))}
             </div>
-          </fieldset>
+          </div>
 
           <div className="share-actions">
             <button className="share-btn share-btn--primary" onClick={share} disabled={rendering}>

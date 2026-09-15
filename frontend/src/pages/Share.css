@@ -18,10 +18,11 @@
   border: none;
   display: flex;
   flex-direction: column;
-  gap: var(--sp-3);
+  gap: var(--sp-4);
 }
 
 .share-group-label {
+  display: block;
   font-size: var(--fs-small);
   font-weight: 700;
   line-height: 1;
@@ -167,22 +168,75 @@
 @media (max-width: 1024px) {
   .share-layout {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .share-controls {
     max-width: none;
+    width: 100%;
   }
 }
 
-@media (max-width: 576px) {
-  .share-preview--story,
-  .share-preview--feed {
-    width: 100%;
-    max-width: 320px;
+@media (max-width: 768px) {
+  .share-layout {
+    gap: var(--sp-6);
+  }
+
+  /* The card is the point of this page — show it first, then the controls. */
+  .share-preview {
+    order: -1;
+  }
+
+  .share-group {
+    gap: var(--sp-3);
+  }
+
+  /* An even grid beats a ragged wrap once the pills no longer fit in one row. */
+  .share-options--templates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .share-options--formats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .share-option {
+    align-items: center;
+    justify-content: center;
+    padding: var(--sp-3) var(--sp-4);
+    text-align: center;
+  }
+
+  .share-actions {
+    flex-wrap: nowrap;
   }
 
   .share-btn {
     flex: 1;
     justify-content: center;
+    padding: var(--sp-3) var(--sp-4);
+  }
+}
+
+@media (max-width: 576px) {
+  /* Keep the preview short enough that the controls stay within reach. */
+  .share-preview--story {
+    width: min(52vw, 200px);
+  }
+
+  .share-preview--feed {
+    width: min(78vw, 300px);
+  }
+
+  /* "Compartilhar" needs the full width at this size — side by side it wraps. */
+  .share-actions {
+    flex-direction: column;
+  }
+
+  .share-btn {
+    width: 100%;
+    letter-spacing: 1px;
   }
 }
