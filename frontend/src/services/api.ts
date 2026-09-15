@@ -2,10 +2,11 @@ import type { SpotifyArtist, SpotifyTrack, GenreCount, UserProfile } from '../ty
 
 export type TimeRange = 'short_term' | 'medium_term' | 'long_term';
 
-// In dev this stays '/api' and the vite proxy forwards to the backend. In
-// production the frontend sits on another domain, so VITE_API_BASE_URL has to
-// point straight at the deployed backend (no '/api' prefix there).
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '/api';
+// Everything is same-origin: in dev the vite proxy forwards '/api' to the
+// backend, in production the vercel rewrite forwards it to the deployed one.
+// So this is a relative prefix, not an absolute URL. An empty or unset variable
+// falls back to '/api', and a trailing slash is dropped to avoid '//' in paths.
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '');
 
 async function request<T>(path: string): Promise<T> {
   const res = await fetch(path, {
@@ -26,9 +27,8 @@ async function request<T>(path: string): Promise<T> {
 
 export const api = {
   login() {
-    // full page navigation: in dev it has to skip the proxy and hit the backend
-    const authBaseUrl = import.meta.env.VITE_API_BASE_URL ?? 'http://127.0.0.1:3000';
-    window.location.assign(`${authBaseUrl}/auth/login`);
+    // full page navigation: the OAuth redirect needs a real document request
+    window.location.assign(`${API_BASE_URL}/auth/login`);
   },
 
   getMe() {
