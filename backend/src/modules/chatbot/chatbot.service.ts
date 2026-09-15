@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GoogleGenAI } from '@google/genai';
 import { DashboardService } from '../dashboard/dashboard.service';
@@ -36,8 +36,12 @@ const CONTEXT_MAP: Record<RecommendationType, ContextKey[]> = {
 
 const DEFAULT_INTENT = 'Responda à pergunta do usuário sobre música com base nos dados fornecidos';
 
+const FALLBACK_EXPLANATION =
+  'Não consegui montar as recomendações agora. Tenta de novo em alguns instantes.';
+
 @Injectable()
 export class ChatbotService {
+  private readonly logger = new Logger(ChatbotService.name);
   private readonly gemini: GoogleGenAI;
 
   constructor(
@@ -128,7 +132,29 @@ Retorne entre 3 e 6 recomendações.
 
   private parseJson(text: string): { explanation: string; recommendations: RecommendationItem[] } {
     const cleaned = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
-    return JSON.parse(cleaned);
+
+    try {
+      const parsed = JSON.parse(cleaned);
+
+      // valid JSON is not enough: resolveItems iterates over `recommendations`
+      if (!parsed || !Array.isArray(parsed.recommendations)) {
+        throw new Error('response does not match the expected shape');
+      }
+
+      return {
+        explanation:
+          typeof parsed.explanation === 'string'
+            ? parsed.explanation
+            : FALLBACK_EXPLANATION,
+        recommendations: parsed.recommendations,
+      };
+    } catch (error) {
+      this.logger.error(
+        `Gemini returned a malformed response: ${cleaned.slice(0, 500)}`,
+        error instanceof Error ? error.stack : undefined,
+      );
+      return { explanation: FALLBACK_EXPLANATION, recommendations: [] };
+    }
   }
 
   private async resolveItems(userId: string, recommendations: RecommendationItem[]): Promise<ResolvedItem[]> {
