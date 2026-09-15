@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import type { TimeRange } from '../services/api';
-import type { SpotifyArtist, SpotifyTrack, GenreCount, UserProfile } from '../types/spotify';
+import type { SpotifyArtist, SpotifyTrack, GenreCount } from '../types/spotify';
 
 interface DashboardData {
-  user: UserProfile | null;
   artists: SpotifyArtist[];
   tracks: SpotifyTrack[];
   genres: GenreCount[];
@@ -13,7 +12,6 @@ interface DashboardData {
 }
 
 export function useDashboardData(timeRange: TimeRange = 'medium_term'): DashboardData {
-  const [user, setUser] = useState<UserProfile | null>(null);
   const [artists, setArtists] = useState<SpotifyArtist[]>([]);
   const [tracks, setTracks] = useState<SpotifyTrack[]>([]);
   const [genres, setGenres] = useState<GenreCount[]>([]);
@@ -26,14 +24,12 @@ export function useDashboardData(timeRange: TimeRange = 'medium_term'): Dashboar
 
     async function fetchAll() {
       try {
-        const [userData, artistsData, tracksData, genresData] = await Promise.all([
-          api.getMe(),
+        const [artistsData, tracksData, genresData] = await Promise.all([
           api.getTopArtists(timeRange),
           api.getTopTracks(timeRange),
           api.getTopGenres(timeRange),
         ]);
         if (cancelled) return;
-        setUser(userData);
         setArtists(artistsData);
         setTracks(tracksData);
         setGenres(genresData);
@@ -49,5 +45,5 @@ export function useDashboardData(timeRange: TimeRange = 'medium_term'): Dashboar
     return () => { cancelled = true; };
   }, [timeRange]);
 
-  return { user, artists, tracks, genres, loading, error };
+  return { artists, tracks, genres, loading, error };
 }
