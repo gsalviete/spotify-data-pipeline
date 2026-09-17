@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import RecentlyPlayed from './pages/RecentlyPlayed';
 import Share from './pages/Share';
 import ChatWidget from './components/ChatWidget';
+import DemoProvider from './demo/DemoProvider';
 
 function AppRoutes() {
   const location = useLocation();
@@ -24,8 +25,10 @@ function AppRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
+    <DemoProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </DemoProvider>
   );
 }
