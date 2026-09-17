@@ -249,6 +249,136 @@
   gap: var(--sp-8);
 }
 
+/* ── Header actions ──────────────────────────────────────── */
+.dash-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  flex-shrink: 0;
+}
+
+/* ── Demo mode ───────────────────────────────────────────── */
+.dash-demo-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-subdued);
+  font-size: var(--fs-small);
+  line-height: 1.4;
+  text-align: center;
+}
+
+.dash-demo-banner svg {
+  flex-shrink: 0;
+  color: var(--text-announcement);
+}
+
+.dash-demo-picker {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-shrink: 0;
+}
+
+.dash-demo-picker-label {
+  color: var(--text-muted);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: var(--ls-button);
+  text-transform: uppercase;
+}
+
+.dash-demo-picker-select {
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-pill-full);
+  color: var(--text-base);
+  font-family: var(--font-ui);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.dash-demo-picker-select:hover {
+  background: var(--surface-3);
+}
+
+/* ── Confirm dialog ──────────────────────────────────────── */
+.dash-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-5);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+}
+
+.dash-dialog {
+  width: 100%;
+  max-width: 400px;
+  padding: var(--sp-6);
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow-dialog);
+}
+
+.dash-dialog-title {
+  font-family: var(--font-title);
+  font-size: var(--fs-heading);
+  font-weight: 700;
+  color: var(--text-base);
+  margin: 0;
+}
+
+.dash-dialog-message {
+  margin: var(--sp-2) 0 var(--sp-6);
+  color: var(--text-subdued);
+  font-size: var(--fs-button);
+  line-height: 1.5;
+}
+
+.dash-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-2);
+}
+
+.dash-dialog-btn {
+  padding: var(--sp-3) var(--sp-5);
+  background: var(--surface-4);
+  border: none;
+  border-radius: var(--r-pill-full);
+  color: var(--text-base);
+  font-family: var(--font-ui);
+  font-size: var(--fs-button);
+  font-weight: 700;
+  line-height: 1;
+  transition: background 0.2s, color 0.2s;
+}
+
+.dash-dialog-btn:hover {
+  background: var(--surface-hover);
+}
+
+.dash-dialog-btn--danger {
+  background: var(--text-negative);
+  color: #000000;
+}
+
+.dash-dialog-btn--danger:hover {
+  background: #ff8a95;
+}
+
 /* ── Responsive ──────────────────────────────────────────── */
 @media (max-width: 896px) {
   .dash-header,
@@ -337,6 +467,22 @@
 
   .dash-time-filters {
     width: 100%;
+  }
+
+  .dash-header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--sp-3);
+  }
+
+  .dash-demo-picker-select {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .dash-demo-banner {
+    font-size: var(--fs-micro);
+    padding: var(--sp-2) var(--sp-4);
   }
 
   /* Three pills have to share the width — trim the type so none gets clipped. */

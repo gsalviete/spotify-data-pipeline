@@ -1,10 +1,13 @@
+import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { api } from '../services/api';
 import type { TimeRange } from '../services/api';
 import type { UserProfile } from '../types/spotify';
 import { timeRangeOptions } from '../lib/timeRange';
+import { useDemo } from '../demo/context';
 import './Shell.css';
 
 /* ── Icons ─────────────────────────────────────────────────── */
@@ -80,6 +83,104 @@ export function ErrorState({ message }: { message: string }) {
   );
 }
 
+/* ── Confirm dialog ────────────────────────────────────────── */
+
+export function ConfirmDialog({
+  title,
+  message,
+  confirmLabel,
+  onConfirm,
+  onCancel,
+}: {
+  title: string;
+  message: string;
+  confirmLabel: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onCancel();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [onCancel]);
+
+  // Portalled to the body: the sidebar it is triggered from is `position:
+  // sticky`, which creates a stacking context the overlay's z-index cannot
+  // escape — it would render behind the page content.
+  return createPortal(
+    <div className="dash-dialog-overlay" onClick={onCancel}>
+      <motion.div
+        className="dash-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dash-dialog-title"
+        onClick={(event) => event.stopPropagation()}
+        initial={{ opacity: 0, scale: 0.94, y: 8 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.18, ease: 'easeOut' }}
+      >
+        <h2 className="dash-dialog-title" id="dash-dialog-title">{title}</h2>
+        <p className="dash-dialog-message">{message}</p>
+        <div className="dash-dialog-actions">
+          <button className="dash-dialog-btn" onClick={onCancel}>
+            Cancelar
+          </button>
+          <button
+            className="dash-dialog-btn dash-dialog-btn--danger"
+            onClick={onConfirm}
+            autoFocus
+          >
+            {confirmLabel}
+          </button>
+        </div>
+      </motion.div>
+    </div>,
+    document.body,
+  );
+}
+
+/* ── Demo mode ─────────────────────────────────────────────── */
+
+function DemoBanner() {
+  return (
+    <div className="dash-demo-banner">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="16" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12.01" y2="8" />
+      </svg>
+      <span>
+        Modo demonstra&ccedil;&atilde;o &mdash; dados de exemplo, capturados previamente.
+      </span>
+    </div>
+  );
+}
+
+function DemoProfilePicker() {
+  const { profiles, profile, selectProfile } = useDemo();
+
+  if (profiles.length < 2 || !profile) return null;
+
+  return (
+    <label className="dash-demo-picker">
+      <span className="dash-demo-picker-label">Perfil</span>
+      <select
+        className="dash-demo-picker-select"
+        value={profile.id}
+        onChange={(event) => selectProfile(event.target.value)}
+      >
+        {profiles.map((option) => (
+          <option key={option.id} value={option.id}>
+            {option.user.displayName}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 /* ── Time range filter ─────────────────────────────────────── */
 
 export function TimeRangeFilter({
@@ -109,6 +210,19 @@ export function TimeRangeFilter({
 function Sidebar({ user }: { user: UserProfile | null }) {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { demo, exitDemo } = useDemo();
+  // Leaving is one misplaced click away, so it always asks first.
+  const [confirmingExit, setConfirmingExit] = useState(false);
+
+  function confirmExit() {
+    setConfirmingExit(false);
+    if (demo) {
+      // Nothing to end server-side: drop the local flag and go back to login.
+      exitDemo();
+      return;
+    }
+    api.logout();
+  }
 
   return (
     <aside className="dash-sidebar">
@@ -151,7 +265,11 @@ function Sidebar({ user }: { user: UserProfile | null }) {
             <span className="dash-user-name">{user.displayName}</span>
             <span className="dash-user-email">{user.email}</span>
           </div>
-          <button className="dash-logout-btn" onClick={() => api.logout()} title="Sair">
+          <button
+            className="dash-logout-btn"
+            onClick={() => setConfirmingExit(true)}
+            title={demo ? 'Sair da demonstracao' : 'Sair'}
+          >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
               <polyline points="16 17 21 12 16 7" />
@@ -159,6 +277,20 @@ function Sidebar({ user }: { user: UserProfile | null }) {
             </svg>
           </button>
         </div>
+      )}
+
+      {confirmingExit && (
+        <ConfirmDialog
+          title={demo ? 'Sair da demonstracao?' : 'Sair da conta?'}
+          message={
+            demo
+              ? 'Voce volta para a tela de login. Pode entrar na demonstracao de novo quando quiser.'
+              : 'Sua sessao sera encerrada e voce precisara entrar de novo com o Spotify.'
+          }
+          confirmLabel="Sair"
+          onConfirm={confirmExit}
+          onCancel={() => setConfirmingExit(false)}
+        />
       )}
     </aside>
   );
@@ -175,11 +307,15 @@ interface PageShellProps {
 }
 
 export default function PageShell({ title, subtitle, actions, user, children }: PageShellProps) {
+  const { demo } = useDemo();
+
   return (
     <div className="dash">
       <Sidebar user={user} />
 
       <main className="dash-main">
+        {demo && <DemoBanner />}
+
         <header className="dash-header">
           <div>
             <motion.h1
@@ -192,7 +328,10 @@ export default function PageShell({ title, subtitle, actions, user, children }: 
             </motion.h1>
             {subtitle && <p className="dash-header-subtitle">{subtitle}</p>}
           </div>
-          {actions}
+          <div className="dash-header-actions">
+            <DemoProfilePicker />
+            {actions}
+          </div>
         </header>
 
         <div className="dash-content">{children}</div>
