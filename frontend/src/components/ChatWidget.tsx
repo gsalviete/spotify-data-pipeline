@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { api } from '../services/api';
+import { useDemo } from '../demo/context';
 import './ChatWidget.css';
 
 type RecommendationType = 'album' | 'artist' | 'music';
@@ -40,6 +41,15 @@ const TYPE_ICONS: Record<RecommendationType, string> = {
   album: '💿',
 };
 
+const DEMO_GREETING =
+  'Modo demonstracao: a resposta abaixo foi gravada previamente, sem consultar a IA.';
+
+/** Keeps the typing indicator on screen long enough to read as a reply. */
+const DEMO_REPLY_DELAY_MS = 700;
+
+const DEMO_UNAVAILABLE =
+  'Esta demonstracao nao tem uma conversa gravada. Entre com o Spotify para usar o chat.';
+
 const RESET_GREETINGS = [
   'O que mais você quer explorar?',
   'Pronto pra mais descobertas?',
@@ -48,9 +58,13 @@ const RESET_GREETINGS = [
 ];
 
 export default function ChatWidget() {
+  const { demo, profile } = useDemo();
   const [open, setOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState<Message[]>(() => [
     { role: 'bot', kind: 'text', text: 'O que você quer descobrir hoje?' },
+    ...(demo
+      ? [{ role: 'bot', kind: 'text', text: DEMO_GREETING } as Message]
+      : []),
     { role: 'bot', kind: 'selector' },
   ]);
   const [selected, setSelected] = useState<RecommendationType[]>([]);
@@ -91,6 +105,25 @@ export default function ChatWidget() {
     setLoading(true);
 
     try {
+      // Demo mode replays the captured answer so visitors never spend Gemini quota.
+      if (profile) {
+        await new Promise((resolve) => setTimeout(resolve, DEMO_REPLY_DELAY_MS));
+        const recorded = profile.chat?.response;
+        setMessages((prev) => [
+          ...prev,
+          recorded
+            ? {
+                role: 'bot',
+                kind: 'cards',
+                explanation: recorded.explanation,
+                items: recorded.items,
+              }
+            : { role: 'bot', kind: 'text', text: DEMO_UNAVAILABLE },
+        ]);
+        setStep('done');
+        return;
+      }
+
       const response = await api.chat(selected, msg);
       setMessages((prev) => [
         ...prev,
