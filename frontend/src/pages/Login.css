@@ -167,6 +167,23 @@
   background: var(--green-press);
 }
 
+/* Secondary action: same shape as the primary button, no brand fill. */
+.login-btn--ghost {
+  margin-top: var(--sp-3);
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-base);
+}
+
+.login-btn--ghost:hover {
+  background: var(--tint-high);
+  border-color: var(--border-light);
+}
+
+.login-btn--ghost:active {
+  background: var(--tint-high);
+}
+
 .login-footer {
   margin-top: var(--sp-6);
   color: var(--text-muted);

@@ -1,10 +1,30 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
+import { useDemo } from '../demo/context';
+import { demoProfileCount } from '../demo/profiles';
 import './Login.css';
 
 const bars = Array.from({ length: 5 }, (_, i) => i);
 
 export default function Login() {
+  const navigate = useNavigate();
+  const { enterDemo } = useDemo();
+  const [openingDemo, setOpeningDemo] = useState(false);
+
+  async function openDemo() {
+    setOpeningDemo(true);
+    try {
+      // The captured files load first: navigating early would render the
+      // dashboard without a profile, and it would call the real API.
+      await enterDemo();
+      navigate('/dashboard');
+    } finally {
+      setOpeningDemo(false);
+    }
+  }
+
   return (
     <div className="login-page">
       <div className="login-bg-noise" />
@@ -64,6 +84,22 @@ export default function Login() {
           </svg>
           Entrar com Spotify
         </motion.button>
+
+        {demoProfileCount > 0 && (
+          <motion.button
+            className="login-btn login-btn--ghost"
+            onClick={openDemo}
+            disabled={openingDemo}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none" />
+            </svg>
+            {openingDemo ? 'Carregando...' : 'Ver demonstracao'}
+          </motion.button>
+        )}
 
         <p className="login-footer">
           Seus dados s&atilde;o usados apenas para visualiza&ccedil;&atilde;o.
