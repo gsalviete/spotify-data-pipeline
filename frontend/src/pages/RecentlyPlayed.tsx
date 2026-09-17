@@ -4,6 +4,7 @@ import { api } from '../services/api';
 import type { RecentlyPlayedItem } from '../types/spotify';
 import PageShell, { LoadingState, ErrorState } from '../components/Shell';
 import { useUser } from '../hooks/useUser';
+import { useDemo } from '../demo/context';
 import './RecentlyPlayed.css';
 
 function formatDuration(ms: number) {
@@ -28,17 +29,25 @@ function timeAgo(isoDate: string): string {
 
 export default function RecentlyPlayed() {
   const user = useUser();
-  const [items, setItems] = useState<RecentlyPlayedItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { profile } = useDemo();
+  const [fetched, setFetched] = useState<RecentlyPlayedItem[]>([]);
+  const [fetching, setFetching] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   useEffect(() => {
+    // Demo mode reads the captured list below instead of calling the backend.
+    if (profile) return;
+
     api
       .getRecentlyPlayed()
-      .then(setItems)
-      .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load data'))
-      .finally(() => setLoading(false));
-  }, []);
+      .then(setFetched)
+      .catch((err) => setFetchError(err instanceof Error ? err.message : 'Failed to load data'))
+      .finally(() => setFetching(false));
+  }, [profile]);
+
+  const items = profile ? profile.recentlyPlayed : fetched;
+  const loading = profile ? false : fetching;
+  const error = profile ? null : fetchError;
 
   if (loading) return <LoadingState />;
   if (error) return <ErrorState message={error} />;
